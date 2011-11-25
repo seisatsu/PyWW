@@ -13,7 +13,7 @@ cgitb.enable()
 ### Config Values ###
 
 wikivars = ["TITLE", "CONTENT"] # Variables which must appear in a wiki file.
-mainpage = "index.wiki" # Default page to show if none specified.
+mainpage = "index" # Default page to show if none specified.
 history = ["history/", True] # Page history directory, enabled or not.
 
 ### Initialization ###
@@ -105,10 +105,13 @@ def pp_link(data, startmark, endmark, template): # Process links.
 					pos += len(endmark)
 					continue
 				substr = substr.split("|")
-				if len(substr) != 2: # Bad markup.
-					substr = ""
-					pos += 1
-					continue
+				if len(substr) != 2: # No description for this link.
+					if len(substr) == 1: # Just use the link.
+						substr.append(substr[0])
+					else: # Bad markup.
+						substr = ""
+						pos += 1
+						continue
 				endpos = pos+len(endmark)
 				newdata = replacerange(data, template.format(substr[0], substr[1]), startpos, endpos)
 				data = pp_link(newdata, startmark, endmark, template) # Recurse.
@@ -193,8 +196,8 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	return data
 
 def read_wiki(page): # Read in page data from wiki file.
-	if os.path.exists(page):
-		f = open(page, "r")
+	if os.path.exists(page+".wiki"):
+		f = open(page+".wiki", "r")
 		w = f.read()
 		exec(w, {"__builtins__": None}, {"wiki": wiki}) # Safe exec.
 		f.close()
@@ -229,11 +232,11 @@ def build_wiki(): # Build a wiki file from page data.
 			data += "wiki[\"{0}\"] = '''{1}'''\n".format(var, pp_escape(wiki[var]))
 		else:
 			data += "wiki[\"{0}\"] = '''{1}'''\n".format(var, wiki[var])
-	f = open(thispage, "w")
+	f = open(thispage+".wiki", "w")
 	f.write(data)
 	f.close()
 	if history[1]: # History enabled, write unix timestamped backup file.
-		f = open(history[0]+"/"+thispage+"."+str(int(time.time())), "w")
+		f = open(history[0]+"/"+thispage+".wiki."+str(int(time.time())), "w")
 		f.write(data)
 		f.close()
 
