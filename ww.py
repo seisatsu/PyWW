@@ -57,7 +57,7 @@ def pp_simple(data, startmark, endmark, template, breaks): # For simple markup.
 			while pos < len(data) and data[pos:pos+8] != "%nowiki%":
 				pos += 1
 			pos += 8
-		if data[pos:pos+len(startmark)] == startmark: # Begin markup.
+		if pos < len(data) and data[pos:pos+len(startmark)] == startmark: # Begin markup.
 			startpos = pos
 			pos += len(startmark)
 			while pos < len(data) and data[pos:pos+len(endmark)] != endmark:
@@ -94,7 +94,7 @@ def pp_link(data, startmark, endmark, template): # Process links.
 			while pos < len(data) and data[pos:pos+8] != "%nowiki%":
 				pos += 1
 			pos += 8
-		if data[pos:pos+len(startmark)] == startmark: # Begin link markup.
+		if pos < len(data) and data[pos:pos+len(startmark)] == startmark: # Begin link markup.
 			startpos = pos
 			pos += len(startmark)
 			while pos < len(data) and data[pos:pos+len(endmark)] != endmark:
@@ -129,7 +129,7 @@ def pp_vars(data): # Process custom variables from content.
 			while pos < len(data) and data[pos:pos+8] != "%nowiki%":
 				pos += 1
 			pos += 8
-		if data[pos] == "{": # Begin variable markup.
+		if pos < len(data) and data[pos] == "{": # Begin variable markup.
 			pos += 1
 			while pos < len(data) and data[pos] != "}":
 				substr += data[pos]
