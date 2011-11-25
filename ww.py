@@ -79,7 +79,8 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	data = pp_char(data, "\n", "<br />")
 
 	# Links, internal and external.
-	data = pp_simple(data, "[[", "]]", "<a href=\"{0}\">{0}</a>")
+	data = pp_simple(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{0}</a>")
+	data = pp_simple(data, "[", "]", "<a href=\"{0}\">{0}</a>")
 
 	return data
 
