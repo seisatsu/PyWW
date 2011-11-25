@@ -28,7 +28,5 @@ Features:
 * It's released under the MIT License for maximum freedom.
 
 Planned Features:
-* Support named links.
-* Built-in documentation with PyDoc.
 * Optional password protection for pages.
 
