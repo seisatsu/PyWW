@@ -73,12 +73,46 @@ def pp_simple(data, startmark, endmark, template, breaks): # For simple markup.
 		pos += 1
 	return data
 
-def pp_escape(data): # Escape common HTML entities.
-	data = data.replace("&", "&amp;") # Must be first.
-	data = data.replace("<", "&lt;")
-	data = data.replace(">", "&gt;")
-	data = data.replace("\"", "&quot;")
-	data = data.replace("\'", "&#39;")
+def pp_link(data, startmark, endmark, template): # Process links.
+	"""Similar to pp_simple, but allows two str.format() identifiers.
+	* data: The page content to be processed.
+	* startmark: The opening markup symbols.
+	* endmark: The closing markup symbols.
+	* template: A str.format() template; {0}, {1} replaced by dest, description.
+	* RETURN: Processed data."""
+
+	inttemp = "<a href=\""+pyww+"?page={0}\">{1}</a>"
+	exttemp = "<a href=\"{0}\">{1}</a>"
+	pos = 0
+	startpos = 0
+	endpos = 0
+	substr = ""
+	
+	while pos < len(data):
+		if data[pos:pos+8] == "%nowiki%": # Markup is disabled here. Skip this.
+			pos += 8
+			while pos < len(data) and data[pos:pos+8] != "%nowiki%":
+				pos += 1
+			pos += 8
+		if data[pos:pos+len(startmark)] == startmark: # Begin link markup.
+			startpos = pos
+			pos += len(startmark)
+			while pos < len(data) and data[pos:pos+len(endmark)] != endmark:
+				substr += data[pos]
+				pos += 1
+			if pos < len(data): # Otherwise it was a bad markup, or we're done.
+				if "<br />" in substr: # No linebreaks allowed.
+					pos += len(endmark)
+					continue
+				substr = substr.split("|")
+				if len(substr) != 2: # Bad markup.
+					substr = ""
+					pos += 1
+					continue
+				endpos = pos+len(endmark)
+				newdata = replacerange(data, template.format(substr[0], substr[1]), startpos, endpos)
+				data = pp_link(newdata, startmark, endmark, template) # Recurse.
+		pos += 1
 	return data
 
 def pp_vars(data): # Process custom variables from content.
@@ -87,6 +121,11 @@ def pp_vars(data): # Process custom variables from content.
 	newvars = {}
 
 	while pos < len(data):
+		if data[pos:pos+8] == "%nowiki%": # Markup is disabled here. Skip this.
+			pos += 8
+			while pos < len(data) and data[pos:pos+8] != "%nowiki%":
+				pos += 1
+			pos += 8
 		if data[pos] == "{": # Begin variable markup.
 			pos += 1
 			while pos < len(data) and data[pos] != "}":
@@ -95,12 +134,21 @@ def pp_vars(data): # Process custom variables from content.
 			if pos < len(data): # Otherwise it was a bad markup, or we're done.
 				substr = substr.split(":")
 				if len(substr) != 2: # Bad markup.
-					return wiki
-				else: # Merge in new variable.
-					newvars[substr[0]] = substr[1]
 					substr = ""
+					pos += 1
+					continue
+				newvars[substr[0]] = substr[1] # Merge in new variable.
+				substr = ""
 		pos += 1
 	return dict(wiki.items() + newvars.items())
+
+def pp_escape(data): # Escape common HTML entities.
+	data = data.replace("&", "&amp;") # Must be first.
+	data = data.replace("<", "&lt;")
+	data = data.replace(">", "&gt;")
+	data = data.replace("\"", "&quot;")
+	data = data.replace("\'", "&#39;")
+	return data
 
 def pp_strip(data): # Strip linebreaks from top of page.
 	while True:
@@ -116,20 +164,20 @@ def replacerange(string, newstring, startpos, endpos):
 	
 def preprocess(data): # Preprocess wiki file content for markup and such.
 	# Replace newlines with <br />.
-	data = pp_char(data, "\r\n", "<br />")
-	data = pp_char(data, "\n\r", "<br />")
-	data = pp_char(data, "\r", "<br />")
-	data = pp_char(data, "\n", "<br />")
+	data = data.replace("\r\n", "<br />")
+	data = data.replace("\n\r", "<br />")
+	data = data.replace("\r", "<br />")
+	data = data.replace("\n", "<br />")
 
 	# Links, internal and external.
-	data = pp_simple(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{0}</a>", False)
-	data = pp_simple(data, "[", "]", "<a href=\"{0}\">{0}</a>", False)
+	data = pp_link(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{1}</a>")
+	data = pp_link(data, "[", "]", "<a href=\"{0}\">{1}</a>")
 	
 	# Miscellaneous markup.
-	data = pp_simple(data, "**", "**", "<b>{0}</b>", False) # Bold
-	data = pp_simple(data, "//", "//", "<i>{0}</i>", False) # Italic
-	data = pp_simple(data, "__", "__", "<u>{0}</u>", False) # Underline
-	data = pp_simple(data, "--", "--", "<s>{0}</s>", False) # Strikethrough
+	data = pp_simple(data, "***", "***", "<b>{0}</b>", True) # Bold
+	data = pp_simple(data, "///", "///", "<i>{0}</i>", True) # Italic
+	data = pp_simple(data, "___", "___", "<u>{0}</u>", True) # Underline
+	data = pp_simple(data, "---", "---", "<s>{0}</s>", True) # Strikethrough
 	data = pp_simple(data, "===", "===", "<span style=\"font-size: 1.5em;\">{0}</span>", False) # Subheading
 	data = pp_simple(data, "==", "==", "<span style=\"font-size: 2em;\">{0}</span>", False) # Heading
 	
