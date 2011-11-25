@@ -66,6 +66,41 @@ def pp_char(data, chars, replace): # Replace characters.
 		pos += 1
 	return data
 
+def pp_escape(data): # Escape common HTML entities.
+	data = pp_char(data, "&", "&amp;") # Must be first.
+	data = pp_char(data, "<", "&lt;")
+	data = pp_char(data, ">", "&gt;")
+	data = pp_char(data, "\"", "&quot;")
+	data = pp_char(data, "\'", "&#39;")
+	return data
+
+def pp_vars(data): # Process custom variables from content.
+	pos = 0
+	substr = ""
+	newvars = {}
+
+	while pos < len(data):
+		if data[pos] == "{": # Begin variable markup.
+			pos += 1
+			while pos < len(data) and data[pos] != "}":
+				substr += data[pos]
+				pos += 1
+			if pos < len(data): # Otherwise it was a bad markup, or we're done.
+				substr = substr.split(":")
+				if len(substr) != 2: # Bad markup.
+					return wiki
+				else: # Merge in new variable.
+					newvars[substr[0]] = substr[1]
+		pos += 1
+	return dict(wiki.items() + newvars.items())
+
+def pp_strip(data): # Strip linebreaks from top of page.
+	while True:
+		if data[0:6] == "<br />":
+			data = data[6:]
+		else:
+			return data
+
 ### Helper Functions ###
 
 def replacerange(string, newstring, startpos, endpos):
@@ -81,6 +116,12 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	# Links, internal and external.
 	data = pp_simple(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{0}</a>")
 	data = pp_simple(data, "[", "]", "<a href=\"{0}\">{0}</a>")
+	
+	# Don't show custom variables.
+	data = pp_simple(data, "{", "}", "")
+	
+	# Strip linebreaks from top of page.
+	data = pp_strip(data)
 
 	return data
 
@@ -110,11 +151,16 @@ def build_edit(): # Build the edit form for this page.
 	print tpl.format(**allvars) # Process the template file and show the page.
 	
 def build_wiki(): # Build a wiki file from page data.
+	global wiki
 	data = ""
+	wiki = pp_vars(wiki["CONTENT"]) # Add custom variables.
 	for var in wiki: # Write values to the wiki file.
 		if not wiki[var]:
 			wiki[var] = " "
-		data += "wiki[\"{0}\"] = '''{1}'''\n".format(var, wiki[var])
+		if var == "CONTENT" or var == "TITLE": # HTML should be escaped.
+			data += "wiki[\"{0}\"] = '''{1}'''\n".format(var, pp_escape(wiki[var]))
+		else:
+			data += "wiki[\"{0}\"] = '''{1}'''\n".format(var, wiki[var])
 	f = open(thispage, "w")
 	f.write(data)
 	f.close()
@@ -130,6 +176,7 @@ def main():
 		read_wiki(thispage)
 		wiki["CONTENT"] = content
 		build_wiki()
+		read_wiki(thispage) # Refresh after writing wiki file.
 		build_page()
 	else:
 		if action == "edit": # Edit the page.
