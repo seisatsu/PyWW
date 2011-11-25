@@ -22,6 +22,14 @@ ___Underline___
 %center%Centered Text%center%
 %nowiki%Disable Markup%nowiki%
 
+Variables:
+The PyWW script uses some variables, which can be set when editing a wiki page as such:
+{name:value}
+
+Supported Variables:
+* {TITLE:Page Title}
+* {PASSWORD:Page Password} (Remember to block .wiki files in your server config.)
+
 Features:
 * The software is self-contained in a single file.
 * The script is less than 10kb in size.
@@ -30,7 +38,5 @@ Features:
 * The wiki layout can be modified by changing simple template files.
 * It can back up previous versions of pages.
 * It's released under the MIT License for maximum freedom.
-
-Planned Features:
-* Optional password protection for pages.
+* Optional password protection for pages. (PASSWORD variable.)
 

@@ -12,9 +12,9 @@ cgitb.enable()
 
 ### Config Values ###
 
-wikivars = ["TITLE", "CONTENT"] # Variables which must appear in a wiki file.
+wikivars = ["TITLE", "CONTENT", "PASSWORD"] # Variables which can appear in a wiki file.
 mainpage = "index" # Default page to show if none specified.
-history = ["history/", True] # Page history directory, enabled or not.
+history = ["history/", False] # Page history directory, enabled or not.
 
 ### Initialization ###
 
@@ -25,6 +25,7 @@ if "REQUEST_METHOD" in os.environ: # Are we on a webserver?
 	if not thispage:
 		thispage = mainpage
 	content = form.getvalue("content")
+	password = form.getvalue("pass")
 	print "Content-type: text/html\n"
 else: # No CGI capabilities.
 	print >> sys.stderr, "Error: This script must be run on a CGI-capable server."
@@ -211,17 +212,31 @@ def read_wiki(page): # Read in page data from wiki file.
 
 def build_page(): # Build this page from page data.
 	allvars = dict(globalvars.items() + wiki.items()) # Variables to read.
-	f = open("page.tpl", "r")
-	tpl = f.read()
-	f.close()
-	allvars["CONTENT"] = preprocess(allvars["CONTENT"]) # Preprocess the wiki content for markup and such.
+	if "PASSWORD" in allvars and password != allvars["PASSWORD"]: # Password required.
+		f = open("password.tpl", "r")
+		tpl = f.read()
+		f.close()
+		if action == "edit" and "FILE" in allvars:
+			allvars["FILE"] += "&action=edit"
+	else:
+		f = open("page.tpl", "r")
+		tpl = f.read()
+		f.close()
+		allvars["CONTENT"] = preprocess(allvars["CONTENT"]) # Preprocess the wiki content for markup and such.
 	print tpl.format(**allvars) # Process the template file and show the page.
 
 def build_edit(): # Build the edit form for this page.
 	allvars = dict(globalvars.items() + wiki.items()) # Variables to read.
-	f = open("edit.tpl", "r")
-	tpl = f.read()
-	f.close()
+	if "PASSWORD" in allvars and password != allvars["PASSWORD"]: # Password required.
+		f = open("password.tpl", "r")
+		tpl = f.read()
+		f.close()
+		if action == "edit" and "FILE" in allvars:
+			allvars["FILE"] += "&action=edit"
+	else:
+		f = open("edit.tpl", "r")
+		tpl = f.read()
+		f.close()
 	print tpl.format(**allvars) # Process the template file and show the page.
 	
 def build_wiki(): # Build a wiki file from page data.
