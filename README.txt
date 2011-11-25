@@ -16,6 +16,10 @@ ___Underline___
 ===Subheading===
 [[Wiki_Page_Name|Descriptive Text]]
 [Link|Descriptive Text]
+%img%Image%img%
+%left%Left Aligned Text%left%
+%right%Right Aligned Text%right%
+%center%Centered Text%center%
 %nowiki%Disable Markup%nowiki%
 
 Features:
