@@ -37,7 +37,7 @@ wiki = {}
 ### Preprocessors ###
 # TODO: No-markup and custom variables.
 
-def pp_simple(data, startmark, endmark, template): # For simple markup.
+def pp_simple(data, startmark, endmark, template, breaks): # For simple markup.
 	pos = 0
 	startpos = 0
 	endpos = 0
@@ -51,9 +51,12 @@ def pp_simple(data, startmark, endmark, template): # For simple markup.
 				substr += data[pos]
 				pos += 1
 			if pos < len(data): # Otherwise it was a bad markup, or we're done.
+				if "<br />" in substr and not breaks: # No linebreaks allowed.
+					pos += len(endmark)
+					continue
 				endpos = pos+len(endmark)
 				newdata = replacerange(data, template.format(substr), startpos, endpos)
-				data = pp_simple(newdata, startmark, endmark, template) # Recurse.
+				data = pp_simple(newdata, startmark, endmark, template, breaks) # Recurse.
 		pos += 1
 	return data
 
@@ -91,6 +94,7 @@ def pp_vars(data): # Process custom variables from content.
 					return wiki
 				else: # Merge in new variable.
 					newvars[substr[0]] = substr[1]
+					substr = ""
 		pos += 1
 	return dict(wiki.items() + newvars.items())
 
@@ -114,11 +118,11 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	data = pp_char(data, "\n", "<br />")
 
 	# Links, internal and external.
-	data = pp_simple(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{0}</a>")
-	data = pp_simple(data, "[", "]", "<a href=\"{0}\">{0}</a>")
+	data = pp_simple(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{0}</a>", False)
+	data = pp_simple(data, "[", "]", "<a href=\"{0}\">{0}</a>", False)
 	
 	# Don't show custom variables.
-	data = pp_simple(data, "{", "}", "")
+	data = pp_simple(data, "{", "}", "", False)
 	
 	# Strip linebreaks from top of page.
 	data = pp_strip(data)
@@ -153,6 +157,7 @@ def build_edit(): # Build the edit form for this page.
 def build_wiki(): # Build a wiki file from page data.
 	global wiki
 	data = ""
+
 	wiki = pp_vars(wiki["CONTENT"]) # Add custom variables.
 	for var in wiki: # Write values to the wiki file.
 		if not wiki[var]:
