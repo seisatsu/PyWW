@@ -27,7 +27,7 @@ if "REQUEST_METHOD" in os.environ: # Are we on a webserver?
 	content = form.getvalue("content")
 	print "Content-type: text/html\n"
 else: # No CGI capabilities.
-	print >> sys.stderr, "Error: server does not support CGI."
+	print >> sys.stderr, "Error: This script must be run on a CGI-capable server."
 	sys.exit(1)
 
 pyww = os.path.basename(__file__) # Name of pyww script.
@@ -38,6 +38,14 @@ wiki = {}
 # TODO: No-markup and custom variables.
 
 def pp_simple(data, startmark, endmark, template, breaks): # For simple markup.
+	"""General preprocessor for simple replace-what's-inside markup.
+	* data: The page content to be processed.
+	* startmark: The opening markup symbols.
+	* endmark: The closing markup symbols.
+	* template: A str.format() template; {0} replaced by the markup contained text.
+	* breaks: True or False; allow linebreaks in the markup.
+	* RETURN: Processed data."""
+
 	pos = 0
 	startpos = 0
 	endpos = 0
@@ -65,21 +73,12 @@ def pp_simple(data, startmark, endmark, template, breaks): # For simple markup.
 		pos += 1
 	return data
 
-def pp_char(data, chars, replace): # Replace characters.
-	pos = 0
-
-	while pos < len(data):
-		if data[pos:pos+len(chars)] == chars:
-			data = replacerange(data, replace, pos, pos+len(chars))
-		pos += 1
-	return data
-
 def pp_escape(data): # Escape common HTML entities.
-	data = pp_char(data, "&", "&amp;") # Must be first.
-	data = pp_char(data, "<", "&lt;")
-	data = pp_char(data, ">", "&gt;")
-	data = pp_char(data, "\"", "&quot;")
-	data = pp_char(data, "\'", "&#39;")
+	data = data.replace("&", "&amp;") # Must be first.
+	data = data.replace("<", "&lt;")
+	data = data.replace(">", "&gt;")
+	data = data.replace("\"", "&quot;")
+	data = data.replace("\'", "&#39;")
 	return data
 
 def pp_vars(data): # Process custom variables from content.
