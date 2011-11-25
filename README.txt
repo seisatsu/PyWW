@@ -23,8 +23,7 @@ ___Underline___
 %nowiki%Disable Markup%nowiki%
 
 Variables:
-The PyWW script uses some variables, which can be set when editing a wiki page as such:
-{name:value}
+The PyWW script uses some variables, which can be set when editing a wiki page as such: {name:value}
 
 Supported Variables:
 * {TITLE:Page Title}

@@ -212,7 +212,7 @@ def read_wiki(page): # Read in page data from wiki file.
 
 def build_page(): # Build this page from page data.
 	allvars = dict(globalvars.items() + wiki.items()) # Variables to read.
-	if "PASSWORD" in allvars and password != allvars["PASSWORD"]: # Password required.
+	if "PASSWORD" in allvars and allvars["PASSWORD"] and password != allvars["PASSWORD"]: # Password required.
 		f = open("password.tpl", "r")
 		tpl = f.read()
 		f.close()
@@ -227,7 +227,7 @@ def build_page(): # Build this page from page data.
 
 def build_edit(): # Build the edit form for this page.
 	allvars = dict(globalvars.items() + wiki.items()) # Variables to read.
-	if "PASSWORD" in allvars and password != allvars["PASSWORD"]: # Password required.
+	if "PASSWORD" in allvars and allvars["PASSWORD"] and password != allvars["PASSWORD"]: # Password required.
 		f = open("password.tpl", "r")
 		tpl = f.read()
 		f.close()
