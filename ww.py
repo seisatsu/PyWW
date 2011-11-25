@@ -44,6 +44,11 @@ def pp_simple(data, startmark, endmark, template, breaks): # For simple markup.
 	substr = ""
 
 	while pos < len(data):
+		if data[pos:pos+8] == "%nowiki%": # Markup is disabled here. Skip this.
+			pos += 8
+			while pos < len(data) and data[pos:pos+8] != "%nowiki%":
+				pos += 1
+			pos += 8
 		if data[pos:pos+len(startmark)] == startmark: # Begin markup.
 			startpos = pos
 			pos += len(startmark)
@@ -121,11 +126,22 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	data = pp_simple(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{0}</a>", False)
 	data = pp_simple(data, "[", "]", "<a href=\"{0}\">{0}</a>", False)
 	
+	# Miscellaneous markup.
+	data = pp_simple(data, "**", "**", "<b>{0}</b>", False) # Bold
+	data = pp_simple(data, "//", "//", "<i>{0}</i>", False) # Italic
+	data = pp_simple(data, "__", "__", "<u>{0}</u>", False) # Underline
+	data = pp_simple(data, "--", "--", "<s>{0}</s>", False) # Strikethrough
+	data = pp_simple(data, "===", "===", "<span style=\"font-size: 1.5em;\">{0}</span>", False) # Subheading
+	data = pp_simple(data, "==", "==", "<span style=\"font-size: 2em;\">{0}</span>", False) # Heading
+	
 	# Don't show custom variables.
 	data = pp_simple(data, "{", "}", "", False)
 	
 	# Strip linebreaks from top of page.
 	data = pp_strip(data)
+	
+	# Clean up nomarkup tags.
+	data = data.replace("%nowiki%", "")
 
 	return data
 

@@ -7,6 +7,17 @@ Lots of wiki software is overcomplicated. With databases and gratuitous configur
 
 PyWW is a tiny wiki in one file written in Python. It has very few features, no database, and almost no configuration variables. The default page layout contains only text and an edit button, though this can be changed by modifying the included template files. Simply install the script and navigate to it in your web browser to bootstrap the wiki.
 
+Supported Markup:
+**Bold**
+//Italic//
+__Underline__
+--Strikethrough--
+==Heading==
+===Subheading===
+[[Internal Link]]
+[External Link]
+%nowiki%Disable Markup%nowiki%
+
 Features:
 * The software is self-contained in a single file.
 * The script is less than 10kb in size.
@@ -17,7 +28,6 @@ Features:
 * It's released under the MIT License for maximum freedom.
 
 Planned Features:
-* Support common markup options.
 * Support named links.
 * Built-in documentation with PyDoc.
 * Optional password protection for pages.
