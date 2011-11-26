@@ -184,6 +184,8 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	data = pp_simple(data, "---", "---", "<s>{0}</s>", True) # Strikethrough
 	data = pp_simple(data, "===", "===", "<span style=\"font-size: 1.5em;\">{0}</span>", False) # Subheading
 	data = pp_simple(data, "==", "==", "<span style=\"font-size: 2em;\">{0}</span>", False) # Heading
+	data = pp_simple(data, "^^^", "^^^", "<sup>{0}</sup>", True) # Superscript
+	data = pp_simple(data, "vvv", "vvv", "<sub>{0}</sub>", True) # Subscript
 	data = pp_simple(data, "%img%", "%img%", "<img src=\"{0}\" />", False) # Image
 	data = pp_simple(data, "%left%", "%left%", "<div style=\"text-align: left;\">{0}</div>", True) # Align Left
 	data = pp_simple(data, "%right%", "%right%", "<div style=\"text-align: right;\">{0}</div>", True) # Align Right
