@@ -209,6 +209,7 @@ def read_wiki(page): # Read in page data from wiki file.
 	else: # The file doesn't exist yet. Return a blank page that can be saved.
 		for var in wikivars:
 			wiki[var] = " "
+		wiki["PASSWORD"] = "" # Fix password bug.
 
 def build_page(): # Build this page from page data.
 	allvars = dict(globalvars.items() + wiki.items()) # Variables to read.
