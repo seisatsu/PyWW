@@ -14,12 +14,16 @@ ___Underline___
 ---Strikethrough---
 ==Heading==
 ===Subheading===
-[[Wiki_Page_Name|Descriptive Text]]
+^^^Superscript^^^
+,,,Subscript,,,
+<<<Left Aligned Text<<<
+>>>Right Aligned Text>>>
+|||Centered Text|||
+(((Preformatted Text)))
+:::Blockquote:::
 [Link|Descriptive Text]
-%img%Image%img%
-%left%Left Aligned Text%left%
-%right%Right Aligned Text%right%
-%center%Centered Text%center%
+[[Wiki_Page_Name|Descriptive Text]]
+[[[Image|Descriptive Text]]]
 %nowiki%Disable Markup%nowiki%
 
 Variables:
@@ -27,7 +31,6 @@ The PyWW script uses some variables, which can be set when editing a wiki page a
 
 Supported Variables:
 * {TITLE:Page Title}
-* {PASSWORD:Page Password} (Remember to block .wiki files in your server config.)
 
 Features:
 * The software is self-contained in a single file.
@@ -37,5 +40,4 @@ Features:
 * The wiki layout can be modified by changing simple template files.
 * It can back up previous versions of pages.
 * It's released under the MIT License for maximum freedom.
-* Optional password protection for pages. (PASSWORD variable.)
 

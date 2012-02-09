@@ -12,7 +12,7 @@ cgitb.enable()
 
 ### Config Values ###
 
-wikivars = ["TITLE", "CONTENT", "PASSWORD"] # Variables which can appear in a wiki file.
+wikivars = ["TITLE", "CONTENT"] # Variables which can appear in a wiki file.
 mainpage = "index" # Default page to show if none specified.
 history = ["history/", False] # Page history directory, enabled or not.
 
@@ -25,7 +25,6 @@ if "REQUEST_METHOD" in os.environ: # Are we on a webserver?
 	if not thispage:
 		thispage = mainpage
 	content = form.getvalue("content")
-	password = form.getvalue("pass")
 	print "Content-type: text/html\n"
 else: # No CGI capabilities.
 	print >> sys.stderr, "Error: This script must be run on a CGI-capable server."
@@ -36,7 +35,6 @@ globalvars = {"PYWW": pyww, "FILE": thispage} # Template required variables.
 wiki = {}
 
 ### Preprocessors ###
-# TODO: No-markup and custom variables.
 
 def pp_simple(data, startmark, endmark, template, breaks): # For simple markup.
 	"""General preprocessor for simple replace-what's-inside markup.
@@ -174,6 +172,7 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	data = data.replace("\n", "<br />")
 
 	# Links, internal and external.
+	data = pp_link(data, "[[[", "]]]", "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" />") # Image
 	data = pp_link(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{1}</a>")
 	data = pp_link(data, "[", "]", "<a href=\"{0}\">{1}</a>")
 	
@@ -183,13 +182,14 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	data = pp_simple(data, "___", "___", "<u>{0}</u>", True) # Underline
 	data = pp_simple(data, "---", "---", "<s>{0}</s>", True) # Strikethrough
 	data = pp_simple(data, "===", "===", "<span style=\"font-size: 1.5em;\">{0}</span>", False) # Subheading
-	data = pp_simple(data, "==", "==", "<span style=\"font-size: 2em;\">{0}</span>", False) # Heading
+	data = pp_simple(data, "==",  "==",  "<span style=\"font-size: 2em;\">{0}</span>", False) # Heading
 	data = pp_simple(data, "^^^", "^^^", "<sup>{0}</sup>", True) # Superscript
 	data = pp_simple(data, "vvv", "vvv", "<sub>{0}</sub>", True) # Subscript
-	data = pp_simple(data, "%img%", "%img%", "<img src=\"{0}\" />", False) # Image
-	data = pp_simple(data, "%left%", "%left%", "<div style=\"text-align: left;\">{0}</div>", True) # Align Left
-	data = pp_simple(data, "%right%", "%right%", "<div style=\"text-align: right;\">{0}</div>", True) # Align Right
-	data = pp_simple(data, "%center%", "%center%", "<div style=\"text-align: center;\">{0}</div>", True) # Align Center
+	data = pp_simple(data, "(((", ")))", "<pre>{0}</pre>", True) # Preformatted Text
+	data = pp_simple(data, ":::", ":::", "<blockquote>{0}</blockquote>", True) # Blockquoted Text
+	data = pp_simple(data, "<<<", "<<<", "<div style=\"text-align: left;\">{0}</div>", True) # Align Left
+	data = pp_simple(data, ">>>", ">>>", "<div style=\"text-align: right;\">{0}</div>", True) # Align Right
+	data = pp_simple(data, "|||", "|||", "<div style=\"text-align: center;\">{0}</div>", True) # Align Center
 	
 	# Don't show custom variables.
 	data = pp_simple(data, "{", "}", "", False)
@@ -211,35 +211,20 @@ def read_wiki(page): # Read in page data from wiki file.
 	else: # The file doesn't exist yet. Return a blank page that can be saved.
 		for var in wikivars:
 			wiki[var] = " "
-		wiki["PASSWORD"] = "" # Fix password bug.
 
 def build_page(): # Build this page from page data.
 	allvars = dict(globalvars.items() + wiki.items()) # Variables to read.
-	if "PASSWORD" in allvars and allvars["PASSWORD"] and password != allvars["PASSWORD"]: # Password required.
-		f = open("password.tpl", "r")
-		tpl = f.read()
-		f.close()
-		if action == "edit" and "FILE" in allvars:
-			allvars["FILE"] += "&action=edit"
-	else:
-		f = open("page.tpl", "r")
-		tpl = f.read()
-		f.close()
-		allvars["CONTENT"] = preprocess(allvars["CONTENT"]) # Preprocess the wiki content for markup and such.
+	f = open("page.tpl", "r")
+	tpl = f.read()
+	f.close()
+	allvars["CONTENT"] = preprocess(allvars["CONTENT"]) # Preprocess the wiki content for markup and such.
 	print tpl.format(**allvars) # Process the template file and show the page.
 
 def build_edit(): # Build the edit form for this page.
 	allvars = dict(globalvars.items() + wiki.items()) # Variables to read.
-	if "PASSWORD" in allvars and allvars["PASSWORD"] and password != allvars["PASSWORD"]: # Password required.
-		f = open("password.tpl", "r")
-		tpl = f.read()
-		f.close()
-		if action == "edit" and "FILE" in allvars:
-			allvars["FILE"] += "&action=edit"
-	else:
-		f = open("edit.tpl", "r")
-		tpl = f.read()
-		f.close()
+	f = open("edit.tpl", "r")
+	tpl = f.read()
+	f.close()
 	print tpl.format(**allvars) # Process the template file and show the page.
 	
 def build_wiki(): # Build a wiki file from page data.
