@@ -15,15 +15,8 @@ included template files. Simply install the script and navigate to it in your we
 
 PyWW pages are written in ReStructured Text. (See http://docutils.sourceforge.net/docs/user/rst/quickref.html)
 
-Features
---------
-
-* The software is self-contained in a single file.
-* The script is less than 10kb in size.
-* The wiki layout can be modified by changing simple template files.
-* It's released under the MIT License for maximum freedom.
-
 Requirements
 ------------
 
 * Python 2 or 3
+* Python Docutils
