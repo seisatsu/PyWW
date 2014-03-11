@@ -26,3 +26,14 @@ Requirements
 
 * Python 2 or 3
 * Python Docutils
+
+Tips and Tricks
+---------------
+
+Linking to an external site:
+
+    `PariahSoft <http://pariahsoft.com/>`_
+
+Making a cross-page link named "Some Article" to the page named "thisone":
+
+    `Some Article <?page=thisone>`_
