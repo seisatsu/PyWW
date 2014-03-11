@@ -9,9 +9,7 @@ A lot of wiki software is overcomplicated. With databases and gratuitous configu
 just wish you had a little less to work with. So, after stumbling upon a very small wiki project written in C, I
 decided to make something similar in Python to give you less. A lot less. In fact, almost nothing.
 
-PyWW is a tiny wiki in one file written in Python. It has very few features, no database, and almost no configuration
-variables. The default page layout contains only text and an edit button, though this can be changed by modifying the
-included template files. Simply install the script and associated template and css files onto a webserver, and navigate to the script in your browser to bootstrap the wiki.
+PyWW is a tiny wiki in one file written in Python. It has no extraneous features, no database, and only a few configuration variables. The default page layout contains only text and an edit button, though this can be changed by modifying the included template files. Simply install the script and associated template and css files onto a webserver, and navigate to the script in your browser to bootstrap the wiki.
 
 Depending on your setup, you may need to edit the default configuration values at the top of the script.
 
@@ -26,3 +24,14 @@ Requirements
 
 * Python 2 or 3
 * Python Docutils
+
+Tips and Tricks
+---------------
+
+Linking to an external site:
+
+    `PariahSoft <http://pariahsoft.com/>`_
+
+Making a cross-page link named "Some Article" to the page named "thisone":
+
+    `Some Article <?page=thisone>`_
