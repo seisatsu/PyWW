@@ -11,19 +11,14 @@ decided to make something similar in Python to give you less. A lot less. In fac
 
 PyWW is a tiny wiki in one file written in Python. It has very few features, no database, and almost no configuration
 variables. The default page layout contains only text and an edit button, though this can be changed by modifying the
-included template files. Simply install the script and navigate to it in your web browser to bootstrap the wiki.
+included template files. Simply install the script and associated template and css files onto a webserver, and navigate to the script in your browser to bootstrap the wiki.
+
+Depending on your setup, you may need to edit the default configuration values at the top of the script.
 
 PyWW pages are written in ReStructured Text. (See http://docutils.sourceforge.net/docs/user/rst/quickref.html)
-
-Features
---------
-
-* The software is self-contained in a single file.
-* The script is less than 10kb in size.
-* The wiki layout can be modified by changing simple template files.
-* It's released under the MIT License for maximum freedom.
 
 Requirements
 ------------
 
 * Python 2 or 3
+* Python Docutils
