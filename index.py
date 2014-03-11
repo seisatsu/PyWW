@@ -76,7 +76,7 @@ stylesheet = "style.css"
 ###
 # HTML for the Edit button in unlocked and locked states.
 #####
-editbutton = ["<input type=\"submit\" value=\"Edit\" />", "Locked"]
+editbutton = ["<input type=\"submit\" value=\"Edit\" />", "<input type=\"button\" value=\"Locked\" />"]
 
 ### End Configuration ###
 
