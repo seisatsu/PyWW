@@ -82,7 +82,7 @@ class PyWW:
 
         self.content = ""
         self.httpheader = "Content-type: text/html; charset=utf-8\n\n"
-        self.path = os.path.join(pagedir, self.page)
+        self.path = os.path.join(pagedir, self.page + ".rst")
         self.formatdict = {}
 
         # Figure out what to do next.
@@ -125,13 +125,13 @@ class PyWW:
         }
 
     def build_page(self):
-        with open(os.path.join(pagedir, page_template), "r") as f:
+        with open(page_template, "r") as f:
             tpl = f.read()
 
         print(tpl.format(**self.formatdict))
 
     def build_edit(self):
-        with open(os.path.join(pagedir, edit_template), "r") as f:
+        with open(edit_template, "r") as f:
             tpl = f.read()
 
         print(tpl.format(**self.formatdict))
