@@ -17,6 +17,8 @@ Depending on your setup, you may need to edit the default configuration values a
 
 PyWW pages are written in ReStructured Text. (See http://docutils.sourceforge.net/docs/user/rst/quickref.html)
 
+Demo Wiki (wiped every 24 hours): http://pariahsoft.com/pyww/
+
 Copyright (c) 2014 PariahSoft LLC; Released under the MIT license.
 
 Requirements
