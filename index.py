@@ -27,14 +27,16 @@
 # Inspired by http://www.moria.de/~michael/ww/
 
 import cgi
-import cgitb
 import os
 
 from docutils.core import publish_parts
 
-cgitb.enable()
-
 ### Configuration ###
+
+###
+# Uncomment this line to enable error reporting on script failure.
+#####
+# import cgitb; cgitb.enable()
 
 ###
 # Whether or not page names are case sensitive. Changing this may break earlier pages.
