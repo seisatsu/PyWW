@@ -73,6 +73,11 @@ pagedir = "."
 #####
 stylesheet = "style.css"
 
+###
+# HTML for the Edit button in unlocked and locked states.
+#####
+editbutton = ["<input type=\"submit\" value=\"Edit\" />", "Locked"]
+
 ### End Configuration ###
 
 
@@ -92,6 +97,7 @@ class PyWW:
         self.newcontent = newcontent
 
         self.content = ""
+        self.locked = False
         self.httpheader = "Content-type: text/html; charset=utf-8\n\n"
         self.path = os.path.join(pagedir, self.page + ".rst")
         self.formatdict = {}
@@ -105,7 +111,10 @@ class PyWW:
         # Editing a page.
         if self.edit:
             self.read_page()
-            self.build_edit()
+            if not self.locked:
+                self.build_edit()
+            else:
+                self.build_page()
 
         # Commiting an edit.
         elif self.newcontent:
@@ -126,9 +135,21 @@ class PyWW:
             with open(self.path, "r") as f:
                 self.content = f.read()
 
+            # Test if the page is writable.
+            try:
+                with open(self.path, "w") as f:
+                    pass
+
+            except:
+                self.locked = True
+
         # Create a new page.
         else:
-            with open(self.path, "w") as f:
+            try:
+                with open(self.path, "w") as f:
+                    pass
+
+            except:
                 pass
 
         # Set up the template formatting dictionary.
@@ -139,6 +160,10 @@ class PyWW:
             "rstparsed": publish_parts(self.content, writer_name="html")["html_body"],
             "stylesheet": stylesheet
         }
+        if not self.locked:
+            self.formatdict["editbutton"] = editbutton[0]
+        else:
+            self.formatdict["editbutton"] = editbutton[1]
 
     def build_page(self):
         """Build the page view and deliver it to the user.
@@ -159,8 +184,12 @@ class PyWW:
     def commit_edit(self):
         """Commit an edit to the page.
         """
-        with open(self.path, "w") as f:
-            f.write(self.newcontent)
+        try:
+            with open(self.path, "w") as f:
+                f.write(self.newcontent)
+
+        except:
+            pass
 
 
 def main():

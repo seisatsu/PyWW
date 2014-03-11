@@ -6,7 +6,7 @@
 </head>
 <body>
     {rstparsed}<form action="{baseurl}?page={page}&edit=1" method="post">
-        <input type="submit" value="Edit" />
+        {editbutton}
     </form>
 </body>
 </html>
