@@ -13,7 +13,7 @@ PyWW is a tiny wiki in one file written in Python. It has very few features, no 
 variables. The default page layout contains only text and an edit button, though this can be changed by modifying the
 included template files. Simply install the script and navigate to it in your web browser to bootstrap the wiki.
 
-PyWW pages are written in ReStructured Text.
+PyWW pages are written in ReStructured Text. (See http://docutils.sourceforge.net/docs/user/rst/quickref.html)
 
 Features
 --------

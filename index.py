@@ -83,13 +83,7 @@ class PyWW:
         self.content = ""
         self.httpheader = "Content-type: text/html; charset=utf-8\n\n"
         self.path = os.path.join(pagedir, self.page)
-        self.formatdict = {
-            "baseurl": baseurl,
-            "content": self.content,
-            "page": self.page,
-            "rstparsed": publish_parts(self.content, writer_name="html")["html_body"],
-            "stylesheet": stylesheet
-        }
+        self.formatdict = {}
 
         # Figure out what to do next.
         self.route()
@@ -121,6 +115,14 @@ class PyWW:
         else:
             with open(self.path, "w") as f:
                 pass
+
+        self.formatdict = {
+            "baseurl": baseurl,
+            "content": self.content,
+            "page": self.page,
+            "rstparsed": publish_parts(self.content, writer_name="html")["html_body"],
+            "stylesheet": stylesheet
+        }
 
     def build_page(self):
         with open(os.path.join(pagedir, page_template), "r") as f:
