@@ -76,6 +76,13 @@ stylesheet = "style.css"
 
 class PyWW:
     def __init__(self, page, edit, newcontent):
+        """PyWW initializer.
+
+        Arguments:
+            page: Name of the page to view or edit.
+            edit: Whether or not we are editing.
+            newcontent: Either None or the content of an edit.
+        """
         self.page = page
         self.edit = edit
         self.newcontent = newcontent
@@ -89,6 +96,8 @@ class PyWW:
         self.route()
 
     def route(self):
+        """Perform the correct actions for the user's request.
+        """
         # Editing a page.
         if self.edit:
             self.read_page()
@@ -106,6 +115,8 @@ class PyWW:
             self.build_page()
 
     def read_page(self):
+        """Read the contents of a page from disk, or create a new page if it does not exist yet.
+        """
         # Read an existing page.
         if os.path.exists(self.path):
             with open(self.path, "r") as f:
@@ -116,6 +127,7 @@ class PyWW:
             with open(self.path, "w") as f:
                 pass
 
+        # Set up the template formatting dictionary.
         self.formatdict = {
             "baseurl": baseurl,
             "content": self.content,
@@ -125,18 +137,24 @@ class PyWW:
         }
 
     def build_page(self):
+        """Build the page view and deliver it to the user.
+        """
         with open(page_template, "r") as f:
             tpl = f.read()
 
         print(tpl.format(**self.formatdict))
 
     def build_edit(self):
+        """Build the page editor and deliver it to the user.
+        """
         with open(edit_template, "r") as f:
             tpl = f.read()
 
         print(tpl.format(**self.formatdict))
 
     def commit_edit(self):
+        """Commit an edit to the page.
+        """
         with open(self.path, "w") as f:
             f.write(self.newcontent)
 
