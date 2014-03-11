@@ -1,10 +1,29 @@
-############################
-## PyWW - Python Wiki Wiki #
-## By Michael D. Reiley    #
-## Copyright 2011 OmegaSDG #
-############################
+###################################
+## PyWW - Python Wiki Wiki       ##
+## index.py                      ##
+## Copyright 2014 PariahSoft LLC ##
+###################################
 
-# Python 2.X Minimal Wiki
+## **********
+## Permission is hereby granted, free of charge, to any person obtaining a copy
+## of this software and associated documentation files (the "Software"), to
+## deal in the Software without restriction, including without limitation the
+## rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+## sell copies of the Software, and to permit persons to whom the Software is
+## furnished to do so, subject to the following conditions:
+##
+## The above copyright notice and this permission notice shall be included in
+## all copies or substantial portions of the Software.
+##
+## THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+## IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+## FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+## AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+## LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+## FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+## IN THE SOFTWARE.
+## **********
+
 # Inspired by http://www.moria.de/~michael/ww/
 
 import cgi, sys, os, time, cgitb
@@ -86,7 +105,7 @@ def pp_link(data, startmark, endmark, template): # Process links.
 	startpos = 0
 	endpos = 0
 	substr = ""
-	
+
 	while pos < len(data):
 		if data[pos:pos+8] == "%nowiki%": # Markup is disabled here. Skip this.
 			pos += 8
@@ -163,7 +182,7 @@ def pp_strip(data): # Strip linebreaks from top of page.
 
 def replacerange(string, newstring, startpos, endpos):
 	return string[:startpos] + newstring + string[endpos:]
-	
+
 def preprocess(data): # Preprocess wiki file content for markup and such.
 	# Replace newlines with <br />.
 	data = data.replace("\r\n", "<br />")
@@ -175,7 +194,7 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	data = pp_link(data, "[[[", "]]]", "<img src=\"{0}\" alt=\"{1}\" title=\"{1}\" />") # Image
 	data = pp_link(data, "[[", "]]", "<a href=\""+pyww+"?page={0}\">{1}</a>")
 	data = pp_link(data, "[", "]", "<a href=\"{0}\">{1}</a>")
-	
+
 	# Miscellaneous markup.
 	data = pp_simple(data, "***", "***", "<b>{0}</b>", True) # Bold
 	data = pp_simple(data, "///", "///", "<i>{0}</i>", True) # Italic
@@ -190,13 +209,13 @@ def preprocess(data): # Preprocess wiki file content for markup and such.
 	data = pp_simple(data, "<<<", "<<<", "<div style=\"text-align: left;\">{0}</div>", True) # Align Left
 	data = pp_simple(data, ">>>", ">>>", "<div style=\"text-align: right;\">{0}</div>", True) # Align Right
 	data = pp_simple(data, "|||", "|||", "<div style=\"text-align: center;\">{0}</div>", True) # Align Center
-	
+
 	# Don't show custom variables.
 	data = pp_simple(data, "{", "}", "", False)
-	
+
 	# Strip linebreaks from top of page.
 	data = pp_strip(data)
-	
+
 	# Clean up nomarkup tags.
 	data = data.replace("%nowiki%", "")
 
@@ -226,7 +245,7 @@ def build_edit(): # Build the edit form for this page.
 	tpl = f.read()
 	f.close()
 	print tpl.format(**allvars) # Process the template file and show the page.
-	
+
 def build_wiki(): # Build a wiki file from page data.
 	global wiki
 	data = ""
