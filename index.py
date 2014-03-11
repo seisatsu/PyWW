@@ -77,6 +77,8 @@ stylesheet = "style.css"
 
 
 class PyWW:
+    """PyWW (Python Wiki Wiki).
+    """
     def __init__(self, page, edit, newcontent):
         """PyWW initializer.
 
@@ -164,7 +166,7 @@ class PyWW:
 def main():
     """This function reads the user request and invokes PyWW accordingly.
     """
-    # Receive HTTP request fields.
+    # Retrieve HTTP request fields.
     fields = cgi.FieldStorage()
 
     # Did the user request a page?
