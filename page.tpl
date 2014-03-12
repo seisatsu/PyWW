@@ -5,7 +5,9 @@
     <link rel="stylesheet" type="text/css" href="{baseurl}{stylesheet}" />
 </head>
 <body>
-{rstparsed}
+
+<!--Begin ReStructured Text-->
+{rstparsed}<!--End ReStructured Text-->
     <form action="{baseurl}?page={page}&edit=1" method="post">
         {editbutton}
     </form>
