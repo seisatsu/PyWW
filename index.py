@@ -137,7 +137,7 @@ class PyWW:
 
             # Test if the page is writable.
             try:
-                with open(self.path, "w") as f:
+                with open(self.path, "a") as f:
                     pass
 
             except:
