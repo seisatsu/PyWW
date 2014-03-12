@@ -8,6 +8,7 @@
 
 <!--Begin ReStructured Text-->
 {rstparsed}<!--End ReStructured Text-->
+
     <form action="{baseurl}?page={page}&edit=1" method="post">
         {editbutton}
     </form>
