@@ -17,8 +17,6 @@ PyWW pages are written in ReStructured Text. (See http://docutils.sourceforge.ne
 
 Demo Wiki (wiped every 24 hours): http://pariahsoft.com/pyww/
 
-Copyright (c) 2015 Michael D. Reiley
-
 Released under the MIT License.
 
 Requirements
