@@ -128,7 +128,7 @@ class PyWW:
             self.build_page()
 
     def read_page(self):
-        """Read the contents of a page from disk, or create a new page if it does not exist yet.
+        """Read the contents of a page from disk if it exists.
         """
         # Read an existing page.
         if os.path.exists(self.path):
@@ -142,15 +142,6 @@ class PyWW:
 
             except:
                 self.locked = True
-
-        # Create a new page.
-        else:
-            try:
-                with open(self.path, "w") as f:
-                    pass
-
-            except:
-                pass
 
         # Set up the template formatting dictionary.
         try:
