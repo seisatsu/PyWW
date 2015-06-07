@@ -1,6 +1,8 @@
 PyWW (Python Wiki Wiki)
 =======================
 
+https://github.com/pariahsoft/PyWW
+
 PyWW, also known as Python Wiki Wiki, is a tiny, minimalistic wiki inspired by Ww (http://www.moria.de/~michael/ww/).
 
 This is a complete rewrite of the last release of this software in early 2012.
