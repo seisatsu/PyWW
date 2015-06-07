@@ -157,7 +157,7 @@ class PyWW:
             "baseurl": baseurl,
             "content": self.content,
             "page": self.page,
-            "rstparsed": publish_parts(self.content, writer_name="html")["html_body"],
+            "rstparsed": publish_parts(self.content, writer_name="html", settings_overrides={'report_level':'quiet'})["html_body"],
             "stylesheet": stylesheet
         }
         if not self.locked:
