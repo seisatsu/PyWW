@@ -153,11 +153,16 @@ class PyWW:
                 pass
 
         # Set up the template formatting dictionary.
+        try:
+            rstparsed = publish_parts(self.content, writer_name="html", settings_overrides={'report_level':'quiet'})["html_body"]
+        except:
+            rstparsed = "!!!RST ERROR!!!"
+        
         self.formatdict = {
             "baseurl": baseurl,
             "content": self.content,
             "page": self.page,
-            "rstparsed": publish_parts(self.content, writer_name="html", settings_overrides={'report_level':'quiet'})["html_body"],
+            "rstparsed": rstparsed,
             "stylesheet": stylesheet
         }
         if not self.locked:
