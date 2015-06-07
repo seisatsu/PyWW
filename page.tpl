@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>{page}</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" type="text/css" href="{baseurl}{stylesheet}" />
 </head>
 <body>
