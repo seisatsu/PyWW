@@ -216,6 +216,12 @@ def main():
     else:
         newcontent = None
 
+    # Disallow certain dangerous characters.
+    if '.' in page or '/' in page:
+        page = default
+        edit = False
+        newcontent = None
+
     # Hand this over to PyWW.
     PyWW(page, edit, newcontent)
 
