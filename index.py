@@ -48,7 +48,7 @@ from docutils.core import publish_parts
 casesensitive = False
 
 ###
-# The domain where the script is hosted.
+# The domain where the script is hosted. (Start with dot if no subdomain.)
 #####
 domain = ".example.com"
 
@@ -110,6 +110,7 @@ class PyWW:
             page: Name of the page to view or edit.
             edit: Whether or not we are editing.
             newcontent: Either None or the content of an edit.
+            cookie: Optional password hash cookie to pass to the user.
         """
         self.page = page
         self.edit = edit
