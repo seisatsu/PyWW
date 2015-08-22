@@ -88,9 +88,9 @@ pagedir = "."
 stylesheet = "style.css"
 
 ###
-# If set, password for accessing the wiki.
+# If set, sha256-hashed password for accessing the wiki.
 #####
-password = ""
+passhash = ""
 
 ###
 # HTML for the Edit button in unlocked and locked states.
@@ -128,17 +128,18 @@ class PyWW:
     def route(self):
         """Perform the correct actions for the user's request.
         """
-        # Get cookies.
-        cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
+        # Send page headers and get cookies.
+        print(self.httpheader)
+        if "HTTP_COOKIE" in os.environ:
+            cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
+        else:
+            cookie = {"passhash": None}
+        if self.cookie:
+            print(self.cookie.output())
+        print("\n")
         
-        # Check if password is required and/or already entered.
-        if password and not cookie["passhash"]:
-            # Ask for password.
-            self.read_page()
-            self.ask_pass()
-        
-        # If the entered password is wrong ask again.
-        elif password and password != cookie["passhash"]:
+        # Check if password is required and/or wrong or already entered.
+        if passhash and ((not cookie) or (not cookie["passhash"]) or (passhash != cookie["passhash"])):
             # Ask for password.
             self.read_page()
             self.ask_pass()
@@ -199,8 +200,8 @@ class PyWW:
             self.formatdict["editbutton"] = editbutton[1]
 
     def ask_pass(self):
-    """Build the page that asks for the password.
-    """
+        """Build the page that asks for the password.
+        """
         with open(askpass_template, "r") as f:
            tpl = f.read()
         
@@ -254,12 +255,12 @@ def main():
         # Make a password hash cookie.
         expiration = datetime.datetime.now() + datetime.timedelta(days=30)
         cookie = Cookie.SimpleCookie()
-        cookie["session"] = random.randint(1000000000)
+        cookie["session"] = random.randint(0, 1000000000)
         cookie["session"]["domain"] = '.'+domain
         cookie["session"]["path"] = baseurl
         cookie["session"]["expires"] = expiration.strftime("%a, %d-%b-%Y %H:%M:%S PST")
         cookie["passhash"] = hashlib.sha256(fields["password"].value).hexdigest()
-     else:
+    else:
         cookie = ""
 
     # Is the user editing the page?
