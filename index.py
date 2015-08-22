@@ -48,7 +48,7 @@ from docutils.core import publish_parts
 casesensitive = False
 
 ###
-# The domain where the script is hosted.
+# The domain (or subdomain) where the script is hosted.
 #####
 domain = "example.com"
 
