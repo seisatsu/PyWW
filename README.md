@@ -39,3 +39,5 @@ Making a cross-page link named "Some Article" to the page named "thisone":
     `Some Article <?page=thisone>`_
 
 To lock a page from editing, change its file permissions to read only. The edit interface will be automatically disabled and blocked for that page.
+
+To erase the contents of a page, delete its file from the server or edit its contents to a single space.
