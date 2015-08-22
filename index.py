@@ -118,7 +118,7 @@ class PyWW:
 
         self.content = ""
         self.locked = False
-        self.httpheader = "Content-type: text/html; charset=utf-8\n\n"
+        self.httpheader = "Content-type: text/html; charset=utf-8"
         self.path = os.path.join(pagedir, self.page + ".rst")
         self.formatdict = {}
 
@@ -140,7 +140,7 @@ class PyWW:
         print("\n")
         
         # Check if password is required and/or wrong or already entered.
-        if passhash and ((not cookie) or (not cookie["passhash"]) or (passhash != cookie["passhash"])):
+        if passhash and ((not cookie) or (not cookie["passhash"]) or (passhash != cookie["passhash"].value)):
             # Ask for password.
             self.read_page()
             self.ask_pass()
@@ -204,8 +204,8 @@ class PyWW:
         """Build the page that asks for the password.
         """
         with open(askpass_template, "r") as f:
-           tpl = f.read()
-        
+            tpl = f.read()
+
         print(tpl.format(**self.formatdict))
 
     def build_page(self):
