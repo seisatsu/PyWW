@@ -130,12 +130,13 @@ class PyWW:
         """
         # Send page headers and get cookies.
         print(self.httpheader)
-        if "HTTP_COOKIE" in os.environ:
+        if self.cookie:
+            print(self.cookie.output())
+            cookie = self.cookie
+        elif "HTTP_COOKIE" in os.environ:
             cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
         else:
             cookie = {"passhash": None}
-        if self.cookie:
-            print(self.cookie.output())
         print("\n")
         
         # Check if password is required and/or wrong or already entered.
