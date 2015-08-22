@@ -27,7 +27,11 @@
 # Inspired by http://www.moria.de/~michael/ww/
 
 import cgi
+import Cookie
+import datetime
+import hashlib
 import os
+import random
 
 from docutils.core import publish_parts
 
@@ -42,6 +46,11 @@ from docutils.core import publish_parts
 # Whether or not page names are case sensitive. Changing this may break earlier pages.
 #####
 casesensitive = False
+
+###
+# The domain where the script is hosted.
+#####
+domain = "test.test"
 
 ###
 # The base URL directory of this script.
@@ -64,6 +73,11 @@ edit_template = "edit.tpl"
 page_template = "page.tpl"
 
 ###
+# Filename of the ask password page template.
+#####
+askpass_template = "askpass.tpl"
+
+###
 # The relative or absolute path on the server to the directory where pages are kept.
 #####
 pagedir = "."
@@ -72,6 +86,11 @@ pagedir = "."
 # Filename of the stylesheet to use.
 #####
 stylesheet = "style.css"
+
+###
+# If set, password for accessing the wiki.
+#####
+password = ""
 
 ###
 # HTML for the Edit button in unlocked and locked states.
@@ -84,7 +103,7 @@ editbutton = ["<input class=\"button-edit pure-button\" type=\"submit\" value=\"
 class PyWW:
     """PyWW (Python Wiki Wiki).
     """
-    def __init__(self, page, edit, newcontent):
+    def __init__(self, page, edit, newcontent, cookie):
         """PyWW initializer.
 
         Arguments:
@@ -95,6 +114,7 @@ class PyWW:
         self.page = page
         self.edit = edit
         self.newcontent = newcontent
+        self.cookie = cookie
 
         self.content = ""
         self.locked = False
@@ -108,24 +128,41 @@ class PyWW:
     def route(self):
         """Perform the correct actions for the user's request.
         """
-        # Editing a page.
-        if self.edit:
+        # Get cookies.
+        cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
+        
+        # Check if password is required and/or already entered.
+        if password and not cookie["passhash"]:
+            # Ask for password.
             self.read_page()
-            if not self.locked:
-                self.build_edit()
-            else:
+            self.ask_pass()
+        
+        # If the entered password is wrong ask again.
+        elif password and password != cookie["passhash"]:
+            # Ask for password.
+            self.read_page()
+            self.ask_pass()
+        
+        # Password is correct or nonexistent, do whatever.
+        else:
+            # Editing a page.
+            if self.edit:
+                self.read_page()
+                if not self.locked:
+                    self.build_edit()
+                else:
+                    self.build_page()
+
+            # Commiting an edit.
+            elif self.newcontent:
+                self.commit_edit()
+                self.read_page()
                 self.build_page()
 
-        # Commiting an edit.
-        elif self.newcontent:
-            self.commit_edit()
-            self.read_page()
-            self.build_page()
-
-        # Just viewing a page.
-        else:
-            self.read_page()
-            self.build_page()
+            # Just viewing a page.
+            else:
+                self.read_page()
+                self.build_page()
 
     def read_page(self):
         """Read the contents of a page from disk if it exists.
@@ -160,6 +197,14 @@ class PyWW:
             self.formatdict["editbutton"] = editbutton[0]
         else:
             self.formatdict["editbutton"] = editbutton[1]
+
+    def ask_pass(self):
+    """Build the page that asks for the password.
+    """
+        with open(askpass_template, "r") as f:
+           tpl = f.read()
+        
+        print(tpl.format(**self.formatdict))
 
     def build_page(self):
         """Build the page view and deliver it to the user.
@@ -204,6 +249,19 @@ def main():
     if not casesensitive:
         page = page.lower()
 
+    # Is the user entering a password?
+    if "password" in fields:
+        # Make a password hash cookie.
+        expiration = datetime.datetime.now() + datetime.timedelta(days=30)
+        cookie = Cookie.SimpleCookie()
+        cookie["session"] = random.randint(1000000000)
+        cookie["session"]["domain"] = '.'+domain
+        cookie["session"]["path"] = baseurl
+        cookie["session"]["expires"] = expiration.strftime("%a, %d-%b-%Y %H:%M:%S PST")
+        cookie["passhash"] = hashlib.sha256(fields["password"].value).hexdigest()
+     else:
+        cookie = ""
+
     # Is the user editing the page?
     if "edit" in fields:
         edit = True
@@ -223,7 +281,7 @@ def main():
         newcontent = None
 
     # Hand this over to PyWW.
-    PyWW(page, edit, newcontent)
+    PyWW(page, edit, newcontent, cookie)
 
 
 # Run the script.
