@@ -50,7 +50,7 @@ casesensitive = False
 ###
 # The domain where the script is hosted.
 #####
-domain = "test.test"
+domain = ".example.com"
 
 ###
 # The base URL directory of this script.
