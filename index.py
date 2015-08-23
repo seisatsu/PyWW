@@ -28,7 +28,6 @@
 
 import cgi
 import Cookie
-import datetime
 import hashlib
 import os
 import random
@@ -255,13 +254,10 @@ def main():
     # Is the user entering a password?
     if "password" in fields:
         # Make a password hash cookie.
-        expiration = datetime.datetime.now() + datetime.timedelta(days=30)
         cookie = Cookie.SimpleCookie()
-        cookie["session"] = random.randint(0, 1000000000)
-        cookie["session"]["domain"] = '.'+domain
-        cookie["session"]["path"] = baseurl
-        cookie["session"]["expires"] = expiration.strftime("%a, %d-%b-%Y %H:%M:%S PST")
         cookie["passhash"] = hashlib.sha256(fields["password"].value).hexdigest()
+        cookie["passhash"]["domain"] = '.'+domain
+        cookie["passhash"]["path"] = baseurl
     else:
         cookie = ""
 
