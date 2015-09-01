@@ -42,4 +42,4 @@ To lock a page from editing, change its file permissions to read only. The edit 
 
 To erase the contents of a page, delete its file from the server or edit its contents to a single space.
 
-You can run PyWW on your home machine with almost no setup! Simply install thttpd (tiny/turbo/throttling HTTP server), review the settings in the thttpd.sh spawn script, review the settings in index.cgi, and then run thttpd.sh while in the same directory. A PyWW instance will be hosted right there, accessible from your local web browser.
+You can run PyWW on your home machine with almost no setup! Simply install thttpd (http://acme.com/software/thttpd/), review the settings in the thttpd.sh spawn script, review the settings in index.cgi, and then run thttpd.sh while in the same directory. A PyWW instance will be hosted right there, accessible from your local web browser.
