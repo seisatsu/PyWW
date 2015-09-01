@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 ###################################
 ## PyWW - Python Wiki Wiki       ##
 ## index.py                      ##
@@ -49,7 +50,7 @@ casesensitive = False
 ###
 # The domain (or subdomain) where the script is hosted.
 #####
-domain = "example.com"
+domain = "localhost"
 
 ###
 # The base URL directory of this script.
@@ -137,7 +138,8 @@ class PyWW:
             cookie = Cookie.SimpleCookie(os.environ["HTTP_COOKIE"])
         else:
             cookie = {"passhash": None}
-        print("\n")
+        # Finish the header with a newline.
+        print("")
         
         # Check if password is required and/or wrong or already entered.
         if passhash and ((not cookie) or (not cookie["passhash"]) or (passhash != cookie["passhash"].value)):
