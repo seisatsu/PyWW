@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #Example script for spawning PyWW via thttpd server.
 #See the thttpd man page.
 
