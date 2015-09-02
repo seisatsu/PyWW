@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-###################################
-## PyWW - Python Wiki Wiki       ##
-## index.py                      ##
-## Copyright 2014 PariahSoft LLC ##
-###################################
+######################################
+## PyWW - Python Wiki Wiki          ##
+## index.py                         ##
+## Copyright 2014 PariahSoft LLC    ##
+## Copyright 2015 Michael D. Reiley ##
+######################################
 
 ## **********
 ## Permission is hereby granted, free of charge, to any person obtaining a copy
