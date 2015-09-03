@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Password Required</title>
+    <title>{title} &raquo; [password]</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" type="text/css" href="{baseurl}{stylesheet}" />
 </head>
