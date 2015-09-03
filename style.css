@@ -6,6 +6,14 @@ textarea {
     font-family: "Lucida Console", Monaco, monospace;
 }
 
+h1 {
+    font-size: 1.5em;
+}
+
+h1.title {
+    font-size: 2em;
+}
+
 .button-edit,
 .button-commit {
     color: white;
