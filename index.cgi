@@ -44,6 +44,11 @@ from docutils.core import publish_parts
 # import cgitb; cgitb.enable()
 
 ###
+# The title of the wiki, used for breadcrumbs.
+#####
+title = "PyWW"
+
+###
 # Whether or not page names are case sensitive. Changing this may break earlier pages.
 #####
 casesensitive = False
@@ -196,7 +201,8 @@ class PyWW:
             "content": self.content,
             "page": self.page,
             "rstparsed": rstparsed,
-            "stylesheet": stylesheet
+            "stylesheet": stylesheet,
+            "title": title
         }
         if not self.locked:
             self.formatdict["editbutton"] = editbutton[0]
