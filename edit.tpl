@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<p class="breadcrumbs"><a href="{baseurl}">{title}</a> &raquo; <a href="{baseurl}?page={page}">{page}</a> &raquo; <a href="{baseurl}?page={page}&edit=1">[edit]</a></p>
+<p class="breadcrumbs"><a href="{baseurl}">{title}</a> &raquo; {crumbs} &raquo; <a href="{baseurl}?page={page}&edit=1">[edit]</a></p>
 
 <form action="{baseurl}?page={page}" method="post">
     <textarea name="newcontent" cols=64 rows=40>{content}</textarea>

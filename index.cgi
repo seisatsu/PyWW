@@ -189,16 +189,27 @@ class PyWW:
 
             except:
                 self.locked = True
+        
+        # Set up breadcrumbs.
+        crumbs_prep = self.page.split(':')
+        crumbs_prep2 = []
+        i = 0
+        while i < len(crumbs_prep):
+            pagelink = ':'.join(crumbs_prep[:i+1])
+            crumbs_prep2.append("<a href=\"{0}?page={1}\">{2}</a>".format(baseurl, pagelink, crumbs_prep[i]))
+            i += 1
+        crumbs = " &raquo; ".join(crumbs_prep2)
 
         # Set up the template formatting dictionary.
         try:
             rstparsed = publish_parts(self.content, writer_name="html", settings_overrides={'report_level':'quiet'})["html_body"]
         except:
             rstparsed = "!!!RST ERROR!!!"
-        
+
         self.formatdict = {
             "baseurl": baseurl,
             "content": self.content,
+            "crumbs": crumbs,
             "page": self.page,
             "rstparsed": rstparsed,
             "stylesheet": stylesheet,
@@ -281,7 +292,7 @@ def main():
         newcontent = fields["newcontent"].value
     else:
         newcontent = None
-
+    
     # Disallow certain dangerous characters.
     if '.' in page or '/' in page:
         page = default

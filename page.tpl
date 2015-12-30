@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<p class="breadcrumbs"><a href="{baseurl}">{title}</a> &raquo; <a href="{baseurl}?page={page}">{page}</a></p>
+<p class="breadcrumbs"><a href="{baseurl}">{title}</a> &raquo; {crumbs}</p>
 
 <!--Begin ReStructured Text-->
 {rstparsed}<!--End ReStructured Text-->
