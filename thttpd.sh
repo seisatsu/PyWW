@@ -2,11 +2,11 @@
 #Example script for spawning PyWW via thttpd server.
 #See the thttpd man page.
 
-INDEX="index.cgi"
+INDEX="index.py"
 PORT="8182"
 DIR=`pwd`
 USER="nobody"
-WILD="**index.cgi"
+WILD="**index.py"
 HOST="localhost"
 LOG=`pwd`/"pyww.log"
 PID=`pwd`/"pyww.pid"
