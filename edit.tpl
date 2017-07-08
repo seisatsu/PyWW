@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>{title} &raquo; {crumbs} &raquo; [edit]</title>
+    <title>{title} &raquo; {titlecrumbs} &raquo; [edit]</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" type="text/css" href="{baseurl}{stylesheet}" />
 </head>

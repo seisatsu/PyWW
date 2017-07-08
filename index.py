@@ -199,6 +199,7 @@ class PyWW:
             crumbs_prep2.append("<a href=\"{0}?page={1}\">{2}</a>".format(baseurl, pagelink, crumbs_prep[i]))
             i += 1
         crumbs = " &raquo; ".join(crumbs_prep2)
+        titlecrumbs = " &raquo; ".join(crumbs_prep)
 
         # Set up the template formatting dictionary.
         try:
@@ -210,6 +211,7 @@ class PyWW:
             "baseurl": baseurl,
             "content": self.content,
             "crumbs": crumbs,
+            "titlecrumbs": titlecrumbs,
             "page": self.page,
             "rstparsed": rstparsed,
             "stylesheet": stylesheet,
